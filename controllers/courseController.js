@@ -34,7 +34,7 @@ exports.getAllCourses = async (req, res) => {
 
 exports.getSingleCourse = async (req, res) => {
   try {
-    const courses = await Course.findById({ _id: req.params.id });
+    const courses = await Course.findOne({ slug: req.params.slug });
 
     res.status(200).render('course-single', {
       courses,
