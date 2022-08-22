@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const userRoute = require('./routes/userRoute');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -22,12 +23,27 @@ mongoose
 //Template Engine
 app.set('view engine', 'ejs');
 
+//Global Variables
+global.userIN = null;
+
 //Middlewares
+
 app.use(express.static('public'));
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(
+  session({
+    secret: 'keyboard_cat',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 //Routes
+app.use('*', (req, res, next) => {
+  userIN = req.session.UserID;
+  next();
+});
 app.use('/', pageRoute);
 app.use('/users', userRoute);
 app.use('/courses', courseRoute);
