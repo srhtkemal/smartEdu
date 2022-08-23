@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const userRoute = require('./routes/userRoute');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
 const categoryRoute = require('./routes/categoryRoute');
+const { options } = require('./routes/userRoute');
 
 const app = express();
 
@@ -34,6 +36,9 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 app.use(
   session({
     secret: 'keyboard_cat',
+    store: MongoStore.create({
+      mongoUrl: 'mongodb://localhost:27017/smartEdu-DB',
+    }),
     resave: false,
     saveUninitialized: true,
   })
