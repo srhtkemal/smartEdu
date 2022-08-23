@@ -10,11 +10,7 @@ exports.getAboutPage = (req, res) => {
     page_name: 'about',
   });
 };
-exports.getDashboardPage = (req, res) => {
-  res.status(200).render('dashboard', {
-    page_name: 'dashboard',
-  });
-};
+
 
 exports.getRegisterPage = (req, res) => {
   res.status(200).render('register', {
