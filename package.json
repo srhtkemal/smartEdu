@@ -7,9 +7,7 @@
     "start": "nodemon app.js"
   },
   "keywords": [
-    "education",
-    "portal",
-    "node.js"
+    "smartedu"
   ],
   "author": "Serhat Kemal",
   "license": "ISC",
@@ -17,12 +15,13 @@
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
     "ejs": "^3.1.6",
-    "express": "^4.17.1",
+    "express": "^4.18.1",
     "express-session": "^1.17.1",
     "mongoose": "^5.12.7",
     "slugify": "^1.5.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "prettier": "^2.7.1"
   }
 }

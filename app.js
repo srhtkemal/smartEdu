@@ -10,7 +10,7 @@ const userRoute = require('./routes/userRoute');
 const app = express();
 
 //Connect DB
-mongoose.connect('mongodb://localhost/smartedu-db', {
+mongoose.connect('mongodb://localhost:27017/smartEdu-DB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -35,7 +35,7 @@ app.use(session({
   secret: 'my_keyboard_cat',
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/smartedu-db' })
+  store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/smartEdu-DB' })
 }))
 
 
