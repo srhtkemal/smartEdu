@@ -10,14 +10,16 @@ const userRoute = require('./routes/userRoute');
 const app = express();
 
 //Connect DB
-mongoose.connect('mongodb://localhost:27017/smartEdu-DB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}).then(()=> {
-  console.log('DB Connected Successfully')
-});
+mongoose
+  .connect('mongodb://localhost:27017/smartEdu-DB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    console.log('DB Connected Successfully');
+  });
 
 //Template Engine
 app.set('view engine', 'ejs');
@@ -26,24 +28,26 @@ app.set('view engine', 'ejs');
 
 global.userIN = null;
 
-
 //Middlewares
 app.use(express.static('public'));
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(session({
-  secret: 'my_keyboard_cat',
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/smartEdu-DB' })
-}))
-
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(
+  session({
+    secret: 'my_keyboard_cat',
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: 'mongodb://localhost:27017/smartEdu-DB',
+    }),
+  })
+);
 
 //Routes
-app.use('*', (req, res, next)=> {
+app.use('*', (req, res, next) => {
   userIN = req.session.userID;
   next();
-})
+});
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);
