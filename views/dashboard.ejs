@@ -35,9 +35,13 @@
 											<h2><a href="/courses/<%= user.courses[i].slug %>" title=""><%= user.courses[i].name%></a></h2>
 										</div>
 										<div class="course-desc">
-											<p>Lorem ipsum door sit amet, fugiat deicata avise id cum, no quo maiorum
-												intel ogrets geuiat operts elicata libere avisse id cumlegebat, liber
-												regione eu sit.... </p>
+											<p><%= user.courses[i].description %></p>
+											 <form method="POST" action="/courses/release">
+				                             	<input type="hidden" name="course_id" value="<%= user.courses[i]._id %>">
+                									<button class="btn btn-lg btn-danger text-white">
+                  										<span>Release</span>
+                									</button>
+              								</form>
 										</div>
 									</div>
 								</div>
