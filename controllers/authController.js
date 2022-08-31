@@ -14,10 +14,10 @@ exports.createUser = async (req, res) => {
     console.log(errors);
     console.log(errors.array()[0].msg);
 
-    for (let i = 0; i <errors.array().length; i++) {
-      req.flash("error", `${errors.array()[i].msg}`);
+    for (let i = 0; i < errors.array().length; i++) {
+      req.flash('error', `${errors.array()[i].msg}`);
     }
-  
+
     res.status(400).redirect('/register');
   }
 };
@@ -29,19 +29,17 @@ exports.loginUser = async (req, res) => {
     await User.findOne({ email }, (err, user) => {
       if (user) {
         bcrypt.compare(password, user.password, (err, same) => {
-
           if (same) {
             // USER SESSION
             req.session.userID = user._id;
             res.status(200).redirect('/users/dashboard');
           } else {
-            req.flash("error", "Your password is not correct!");
+            req.flash('error', 'Your password is not correct!');
             res.status(400).redirect('/login');
           }
-
         });
       } else {
-        req.flash("error", "User is not exist!");
+        req.flash('error', 'User is not exist!');
         res.status(400).redirect('/login');
       }
     });
@@ -54,20 +52,38 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.logoutUser = (req, res) => {
-  req.session.destroy(()=> {
+  req.session.destroy(() => {
     res.redirect('/');
-  })
-}
-
+  });
+};
 
 exports.getDashboardPage = async (req, res) => {
-  const user = await User.findOne({_id:req.session.userID}).populate('courses');
+  const user = await User.findOne({ _id: req.session.userID }).populate(
+    'courses'
+  );
+  const users = await User.find();
   const categories = await Category.find();
-  const courses = await Course.find({user:req.session.userID})
+  const courses = await Course.find({ user: req.session.userID });
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,
+    users,
     categories,
-    courses
+    courses,
   });
+};
+exports.deleteUser = async (req, res) => {
+  try {    
+
+    await User.findByIdAndRemove(req.params.id)
+    await Course.deleteMany({user:req.params.id})
+
+    res.status(200).redirect('/users/dashboard');
+
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error,
+    });
+  }
 };
