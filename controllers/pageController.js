@@ -1,9 +1,19 @@
 const nodemailer = require('nodemailer');
+const User = require('../models/User');
+const Course = require('../models/Course');
 
-exports.getIndexPage = (req, res) => {
-  console.log(req.session.userID);
+exports.getIndexPage = async (req, res) => {
+  const courses = await Course.find().sort('-createdAt').limit(2);
+  const totalCourses = await Course.find().countDocuments();
+  const totalTeachers = await User.find({ role: 'teacher' }).countDocuments();
+  const totalStudents = await User.find({ role: 'student' }).countDocuments();
+
   res.status(200).render('index', {
     page_name: 'index',
+    courses,
+    totalCourses,
+    totalTeachers,
+    totalStudents,
   });
 };
 
@@ -48,15 +58,15 @@ exports.sendEmail = async (req, res) => {
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: 'serhaatkemal@gmail.com', // gmail account
+        user: '', // gmail account
         pass: '', // gmail password
       },
     });
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: '"Smart Edu Form" <serhaatkemal@gmail.com>', // sender address
-      to: 'serhaatkemal@gmail.com', // list of receivers
+      from: '"Smart Edu Form" <>', // sender address
+      to: '', // list of receivers
       subject: 'Smart Edu Contact Form', // Subject line
 
       html: outputMessage, // html body
@@ -71,10 +81,8 @@ exports.sendEmail = async (req, res) => {
     req.flash('success', 'We received your response!');
   } catch (error) {
     req.flash('error', `Oops! Something went wrong, Please try again later`);
-  
-    res.status(200).redirect('contact');
 
+    res.status(200).redirect('contact');
   }
   res.status(400).redirect('contact');
-
 };
